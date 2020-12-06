@@ -35,12 +35,12 @@ class Level:
 			for i, _ in enumerate(self.map):
 				self.map[i] += ' '
 		if name.endswith('_size'):
-			try: 
+			try:
 				self.__dict__[name[:-5] + '_image'] = pygame.transform.scale(self.__dict__[name[:-5] + '_image'], list(map(int, value)))
 			except KeyError:
 				pass
 		if name.endswith('_image'):
-			try: 
+			try:
 				self.__dict__[name[:-6] + '_size'] = self.__dict__[name[:-6] + '_image'].get_rect().size
 			except KeyError:
 				pass
@@ -85,7 +85,7 @@ class Level:
 		self.enemies = pygame.sprite.Group()
 		self.heals = pygame.sprite.Group()
 
-		
+
 
 		self.wall = Sprite((0, 0), size=(self.block_size[0], self.map_size[1]))
 
@@ -131,7 +131,7 @@ class Level:
 							if c == 'e':
 								self.enemies.add(Enemy(ex, platform, self.enemy_size, self.enemy_image, self.enemy_text.copy(), self.enemy_reply, self.enemy_reply_time, speed=1, anim=self.enemy_anim))
 							ex += self.block_size[0]
-								
+
 					p = 0
 				x += self.block_size[0]
 			x = 0
@@ -187,20 +187,20 @@ class Level:
 		if self.hero.xaccel == 0:
 			self.hero.xvel = 0 # Если кнопку не жмем, герой не должен двигаться по OX.
 
-		
+
 		self.enemies.update()
-		
+
 		self._enemies_and_platforms()
 		self._enemies_and_enemies()
 		h_w = self._hero_and_wall()
-		if h_w: 
+		if h_w:
 			return h_w
 		if self.hero.rect.top > self.map_size[1]:
 			return 'restart'
-			
+
 		self._hero_and_heals()
 		h_p = self._hero_and_portal()
-		if h_p: 
+		if h_p:
 			return h_p
 
 
@@ -212,14 +212,14 @@ class Level:
 				if yvel > 0:  # ... и герой пытается провалиться вниз сквозь платформу...
 					self.hero.rect.bottom = p.rect.top # ...не даём ему это сделать
 					self.hero.onGround = True
-					self.hero.yvel = 0  
+					self.hero.yvel = 0
 
 				if yvel < 0: # Так же, если он пытается пробить платформу головой
-					self.hero.rect.top = p.rect.bottom  
-					self.hero.yvel = 0  
+					self.hero.rect.top = p.rect.bottom
+					self.hero.yvel = 0
 
 				if xvel > 0:  # Упирается в платформу, идя вправо
-					self.hero.rect.right = p.rect.left  
+					self.hero.rect.right = p.rect.left
 
 				if xvel < 0:  # влево
 					self.hero.rect.left = p.rect.right
@@ -228,7 +228,7 @@ class Level:
 		for e in self.enemies:
 
 			if pygame.sprite.collide_rect(self.hero, e):
-				
+
 				if self.hero.yvel >= 1:
 					if self.enemy_kill_sound:
 						self.enemy_kill_sound.play()
@@ -238,7 +238,7 @@ class Level:
 				else:
 					if self.enemy_bump_sound:
 						self.enemy_bump_sound.play()
-					
+
 					e.t = time.time()
 					e.text.text = e.reply
 					e.text.follow(e)
@@ -284,7 +284,7 @@ class Level:
 					e2.rect.x += d/2
 					e1.xvel = -e1.xvel
 					e2.xvel = -e2.xvel
-					
+
 
 
 	def _hero_and_wall(self):
@@ -408,7 +408,7 @@ class Level:
 		self.next_level_sound = None
 
 		self.hero_size = (4*b, 6*b)
-		hero_images = [[load_image(data_dir, 'max' + str(i) + direction, self.hero_size) 
+		hero_images = [[load_image(data_dir, 'max' + str(i) + direction, self.hero_size)
 		for i in range(1, 10)] for direction in ('right.png', 'left.png')]
 		self.__dict__['hero_image'] = hero_images[0][0]
 		self.hero_anim = [Animation(hero_images[i], 9, 8) for i in range(2)]
@@ -416,7 +416,7 @@ class Level:
 		self.gravity = b/100*3
 		self.hero_jump_power = b
 
-		
+
 		self.block_image = load_image(data_dir, 'parta.png', self.block_size)
 
 		self.wall_block_size = (b, self.block_size[1])
@@ -492,10 +492,10 @@ class Level:
 
 sounds = {}
 for name in ('duet1', 'duet2', 'duet3', 'pantera', 'bump', 'tii_chtole', 'bzz', 'molodec', 'chewing', 'crown_sound', 'vzhuh', 'r2d2', 'kosmos', 'kosmos_portal'):
-	sounds[name] = load_sound(data_dir, name+'.ogg')
+	sounds[name] = load_sound(data_dir, name+'.wav')
 
 levels = []
-#----------------------LVL1---------------------------------------		
+#----------------------LVL1---------------------------------------
 
 
 
@@ -776,7 +776,7 @@ def create_level():
 	lvl.enemy_size = (4*b, 4*b)
 	lvl.enemy_reply = ''
 	lvl.map =  [
-  	
+
   	'---------------------------------------------------------',
   	'                                                p       -',
   	'                        s      e    h                   -',
@@ -787,19 +787,19 @@ def create_level():
 
 	lvl.hero_size = (4*b, 6*b)
 	lvl.hero_speed = b
-	hero_images = [[load_image(data_dir, 'pantera' + direction, lvl.hero_size) 
+	hero_images = [[load_image(data_dir, 'pantera' + direction, lvl.hero_size)
 	for i in range(1, 3)] for direction in ('_right.png', '_left.png')]
 	lvl.__dict__['hero_image'] = hero_images[0][0]
 	lvl.hero_anim = [Animation(hero_images[i], 1, 1) for i in range(2)]
 
 	lvl.wall_block_image = load_image(data_dir, 'laser_blue.png', lvl.wall_block_size)
 
-	enemy_images = [[load_image(data_dir, 'crown' + direction, lvl.enemy_size) 
+	enemy_images = [[load_image(data_dir, 'crown' + direction, lvl.enemy_size)
 	for i in range(1, 3)] for direction in ('_right.png', '_left.png')]
 	lvl.__dict__['enemy_image'] = hero_images[0][0]
 	lvl.enemy_anim = [Animation(enemy_images[i], 1, 1) for i in range(2)]
 
-		
+
 	lvl.block_image = load_image(data_dir, 'pantera_block.jpg', lvl.block_size)
 
 	return lvl
@@ -811,7 +811,7 @@ def create_level():
 	lvl = levels[6]()
 	lvl.hero_speed = b/2
 	lvl.hero_size = (4*b, 4*b)
-	hero_images = [[load_image(data_dir, 'pantera' + direction, lvl.hero_size) 
+	hero_images = [[load_image(data_dir, 'pantera' + direction, lvl.hero_size)
 	for i in range(1, 3)] for direction in ('_right.png', '_left.png')]
 	lvl.__dict__['hero_image'] = hero_images[0][0]
 	lvl.hero_anim = [Animation(hero_images[i], 1, 1) for i in range(2)]
@@ -949,7 +949,7 @@ def create_level():
     lvl.enemy_kill_sound = sounds['bump']
     lvl.block_image = load_image(data_dir, 'kos_block.png', lvl.block_size)
     #lvl.hero_size = (4*b, 6*b)
-    hero_images = [[load_image(data_dir, 'kosmonaft' + direction, lvl.hero_size) 
+    hero_images = [[load_image(data_dir, 'kosmonaft' + direction, lvl.hero_size)
     for i in range(1, 3)] for direction in ('_right.png', '_left.png')]
     lvl.__dict__['hero_image'] = hero_images[0][0]
     lvl.hero_anim = [Animation(hero_images[i], 1, 1) for i in range(2)]
@@ -1003,7 +1003,7 @@ def create_level():
     lvl.enemy_kill_sound = sounds['bump']
     lvl.block_image = load_image(data_dir, 'kos_block.png', lvl.block_size)
     #lvl.hero_size = (4*b, 6*b)
-    hero_images = [[load_image(data_dir, 'kosmonaft' + direction, lvl.hero_size) 
+    hero_images = [[load_image(data_dir, 'kosmonaft' + direction, lvl.hero_size)
     for i in range(1, 3)] for direction in ('_right.png', '_left.png')]
     lvl.__dict__['hero_image'] = hero_images[0][0]
     lvl.hero_anim = [Animation(hero_images[i], 1, 1) for i in range(2)]
@@ -1046,7 +1046,7 @@ def create_level():
     lvl.enemy_kill_sound = sounds['bump']
     lvl.block_image = load_image(data_dir, 'kos_block.png', lvl.block_size)
     lvl.hero_size = (4*b, 6*b)
-    hero_images = [[load_image(data_dir, 'kosmonaft' + direction, lvl.hero_size) 
+    hero_images = [[load_image(data_dir, 'kosmonaft' + direction, lvl.hero_size)
     for i in range(1, 3)] for direction in ('_right.png', '_left.png')]
     lvl.__dict__['hero_image'] = hero_images[0][0]
     lvl.hero_anim = [Animation(hero_images[i], 1, 1) for i in range(2)]

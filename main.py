@@ -39,8 +39,8 @@ except Continue:
 		i = 0
 	finally:
 		save.close()
-		
-	
+
+
 menu = Menu(screen_size, True)
 
 lvl = levels[i]()
@@ -59,7 +59,7 @@ while True:
 			save = shelve.open('save')
 			save['save'] = i
 			save.close()
-			pygame.quit()	
+			pygame.quit()
 			sys.exit()
 	keys = pygame.key.get_pressed()
 	if keys[pygame.K_ESCAPE]:
@@ -93,7 +93,7 @@ while True:
 				print('You win')
 				save = shelve.open('save')
 				#save['save'] = 0
-				save.close()		
+				save.close()
 				screen.fill((255, 255, 255))
 				text = Text('YOU WIN', (0, 0), size = 40)
 				screen.blit(text.image, (screen_size[0]//2, screen_size[1]//2))
@@ -135,7 +135,7 @@ while True:
 				save = shelve.open('save')
 				save['save'] = i
 				save.close()
-			
+
 		except Exit:
 			pygame.quit()
 			sys.exit()
@@ -194,7 +194,7 @@ while True:
 					i = 0
 				finally:
 					save.close()
-			
+
 
 	elif do == 'restart' or not lvl.remaining_hearts:
 		print(do)
@@ -214,7 +214,7 @@ while True:
 	for enemy in lvl.enemies:
 		screen.blit(enemy.image, camera.apply(enemy))
 		screen.blit(enemy.text.image, camera.apply(enemy.text))
-	
+
 	for heal in lvl.heals:
 		screen.blit(heal.image, camera.apply(heal))
 	for heart in lvl.remaining_hearts:
